@@ -8,7 +8,7 @@ NWC (Nostr Wallet Connect) is a Dart package. It offers a straightforward soluti
 ## Features
 - **Simple Integration**: Easily implement the NWC protocol into your Nostr client or Flutter app with minimal effort.
 - **Standardized Protocol**: Follows the specifications outlined in [NIP47](https://github.com/nostr-protocol/nips/blob/master/47.md) for consistent and reliable functionality.
-- **Secure Communication**: Ensures secure communication between your client and the remote Lightning wallet ([NIP04](https://github.com/nostr-protocol/nips/blob/master/04.md) included).
+- **Secure Communication**: Ensures secure communication between your client and the remote Lightning wallet ([NIP04](https://github.com/nostr-protocol/nips/blob/master/04.md) implemented).
 
 ## Installation
 
