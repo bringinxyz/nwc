@@ -38,7 +38,6 @@ Future<void> main() async {
         );
 
         final content = nwc.nip47.parseResponseResult(decryptedContent);
-
         if (content.resultType == NWCResultType.get_balance) {
           final result = content.result as Get_Balance_Result;
           print('[+] Balance: ${result.balance} msat');
@@ -48,6 +47,10 @@ Future<void> main() async {
         } else if (content.resultType == NWCResultType.pay_invoice) {
           final result = content.result as Pay_Invoice_Result;
           print('[+] Preimage: ${result.preimage}');
+        } else if (content.resultType == NWCResultType.list_transactions) {
+          final result = content.result as List_Transactions_Result;
+          print(
+              '[+] First Tx description: ${result.transactions.first.description}');
         } else if (content.resultType == NWCResultType.error) {
           final result = content.result as NWC_Error_Result;
           print('[+] Preimage: ${result.errorMessage}');
@@ -63,8 +66,9 @@ Future<void> main() async {
   });
 
   await getBalance(nwc, parsedUri);
-  await makeInvoice(nwc, parsedUri);
-  await payInvoice(nwc, parsedUri);
+  // await makeInvoice(nwc, parsedUri);
+  // await payInvoice(nwc, parsedUri);
+  await listTransactions(nwc, parsedUri);
 }
 
 Future<void> getBalance(NWC nwc, NostrWalletConnectUri parsedUri) async {
@@ -162,4 +166,36 @@ Future<void> payInvoice(NWC nwc, NostrWalletConnectUri parsedUri) async {
   );
 
   print('[+] payInvoice() => okCommand: $okCommand');
+}
+
+Future<void> listTransactions(NWC nwc, NostrWalletConnectUri parsedUri) async {
+  final message = {
+    "method": "list_transactions",
+    "params": {
+      "limit": 10,
+    }
+  };
+
+  final content = nwc.nip04.encrypt(
+    parsedUri.secret,
+    parsedUri.pubkey,
+    jsonEncode(message),
+  );
+
+  final request = Event.fromPartialData(
+    kind: 23194,
+    content: content,
+    tags: [
+      ['p', parsedUri.pubkey]
+    ],
+    createdAt: DateTime.now(),
+    keyPairs: KeyPairs(private: parsedUri.secret),
+  );
+
+  final okCommand = await nwc.relaysService.sendEventToRelays(
+    request,
+    timeout: const Duration(seconds: 3),
+  );
+
+  print('[+] listTransactions() => okCommand: $okCommand');
 }
