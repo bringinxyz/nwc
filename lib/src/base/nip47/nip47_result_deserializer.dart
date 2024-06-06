@@ -3,12 +3,7 @@
 import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
-import 'package:nwc/src/nip47_result/get_balance_result.dart';
-import 'package:nwc/src/nip47_result/lookup_invoice_result.dart';
-import 'package:nwc/src/nip47_result/make_invoice_result.dart';
-import 'package:nwc/src/nip47_result/nwc_error_result.dart';
-import 'package:nwc/src/nip47_result/pay_invoice_result.dart';
-
+import 'package:nwc/src/nip47_result/nip47_result.dart';
 import '../../utils/nwc_result_type.dart';
 
 /// Deserializes [NIP47] response results into corresponding objects.
@@ -51,6 +46,9 @@ class Nip47ResultDeserializer extends Equatable {
           break;
         case NWCResultType.pay_invoice:
           result = Pay_Invoice_Result.deserialize(data);
+          break;
+        case NWCResultType.list_transactions:
+          result = List_Transactions_Result.deserialize(data);
           break;
         default:
           result = data;

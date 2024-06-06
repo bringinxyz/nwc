@@ -17,6 +17,9 @@ enum NWCResultType {
   /// Indicates a 'lookup_invoice' operation result.
   lookup_invoice("lookup_invoice"),
 
+  /// Indicates a 'list_transactions' operation result.
+  list_transactions("list_transactions"),
+
   /// Indicates an error result.
   error("error");
 
